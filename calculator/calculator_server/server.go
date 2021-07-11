@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"log"
+	"net"
 
 	"github.com/cota-eng/grpc-go/calculator/calculator_pb"
+	"google.golang.org/grpc"
 )
 
 
@@ -17,4 +20,16 @@ func (*server) Sum(ctx context.Context, req *calculator_pb.CalculatorRequest)(*c
 		Result:result,
 	}
 	return res,nil
+}
+
+func main(){
+	lis,err:=net.Listen("tcp","0.0.0.0:50051")
+	if err!=nil{
+		log.Fatalf("Failed to listen: %v",err)
+	}
+	s:=grpc.NewServer()
+	calculator_pb.RegisterCalculatorServiceServer(s,&server{})
+	if err:=s.Serve(lis);err!=nil{
+		log.Fatalln("failed to serve:",err)
+	}
 }
