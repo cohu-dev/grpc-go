@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 
@@ -13,8 +14,9 @@ import (
 type server struct {}
 
 func (*server) Sum(ctx context.Context, req *calculator_pb.CalculatorRequest)(*calculator_pb.CalculatorResponse,error){
-	number1 := req.TwoNumber.GetNumber1()
-	number2 := req.TwoNumber.GetNumber2()
+	fmt.Printf("Received:%v",req)
+	number1 := req.NumberOne
+	number2 := req.NumberTwo
 	result := number1+number2
 	res := &calculator_pb.CalculatorResponse{
 		Result:result,
