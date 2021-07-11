@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/cota-eng/grpc-go/greet/greetpb"
@@ -24,7 +25,8 @@ func main() {
 
 	c:=greetpb.NewGreetServiceClient(conn)
 
-	doUnary(c)
+	// doUnary(c)
+	doServerStreaming(c)
 	
 }
 
@@ -43,21 +45,29 @@ func doUnary(c greetpb.GreetServiceClient){
 	}
 	
 	log.Printf("response from greet: %v",res.Result)
-	//  from greet.pb.go 
-	// 	type GreetRequest struct {
-	// 	state         protoimpl.MessageState
-	// 	sizeCache     protoimpl.SizeCache
-	// 	unknownFields protoimpl.UnknownFields
+}
+
+func doServerStreaming(c greetpb.GreetServiceClient){
+	req := &greetpb.GreetManyTimesRequest{
+		Greeting:&greetpb.Greeting{
+			FirstName:"Server",
+			LastName:"Stream",
+		},
+	}
+	resStream,err:=c.GreetManyTimes(context.Background(), req) 
+	if err!=nil{
+		log.Fatalf("error while calling server streaming:%v",err)
+	}
+	for{
+		msg,err:=resStream.Recv()
+		if err==io.EOF{
+			// if reached end of the file
+			break
+		}
+		if err!=nil{
+			log.Fatalf("error while read streaming:%v",err)
+		}
+		log.Printf("Res from GreetManyTimes Message :%v",msg)
+	}
 	
-	// 	Greeting *Greeting `protobuf:"bytes,1,opt,name=greeting,proto3" json:"greeting,omitempty"`
-	// }
-	
-	// type Greeting struct {
-	// state         protoimpl.MessageState
-	// sizeCache     protoimpl.SizeCache
-	// unknownFields protoimpl.UnknownFields
-	
-	// FirstName string `protobuf:"bytes,1,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
-	// LastName  string `protobuf:"bytes,2,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
-	// }
 }
