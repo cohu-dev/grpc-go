@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package calculator;
+option go_package="calculator/calculator_pb";
+
+message Number{
+    int32 number1 = 1;
+    int32 number2 = 2;
+}
+
+message CalculatorRequest{
+    Number two_number = 1;
+}
+
+message CalculatorResponse{
+    int32 result = 1;
+}
+
+service CalculatorService{
+    rpc Greet(CalculatorRequest) returns (CalculatorResponse){};
+}
+// protoc calculator/calculator_pb/calculator.proto --go_out=plugins=grpc:.
