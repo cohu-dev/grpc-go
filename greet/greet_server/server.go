@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net"
-
 	"github.com/cota-eng/grpc-go/greet/greetpb"
 	"google.golang.org/grpc"
 )
 
 type server struct {}
-
 
 func (*server) Greet(ctx context.Context,req *greetpb.GreetRequest) (*greetpb.GreetResponse, error){
 	fmt.Printf("Greet func invoked %v",req)
@@ -26,7 +24,6 @@ func (*server) Greet(ctx context.Context,req *greetpb.GreetRequest) (*greetpb.Gr
 
 func main() {
 	fmt.Println("Hello")
-
 	// tcpでgrpc標準のポートへ接続
 	lis,err:=net.Listen("tcp","0.0.0.0:50051")
 	if err!=nil{
