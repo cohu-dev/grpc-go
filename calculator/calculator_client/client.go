@@ -9,25 +9,24 @@ import (
 	"google.golang.org/grpc"
 )
 
-
 func main() {
-	conn, err := grpc.Dial("localhost:50051",grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("Could not connect:%v",err)
+		log.Fatalf("Could not connect:%v", err)
 	}
 	defer conn.Close()
-	c:=calculator_pb.NewCalculatorServiceClient(conn)
+	c := calculator_pb.NewCalculatorServiceClient(conn)
 	doUnary(c)
 }
 
-func doUnary(c calculator_pb.CalculatorServiceClient){
-	req:=&calculator_pb.CalculatorRequest{
-			NumberOne: 3,
-			NumberTwo: 2,
+func doUnary(c calculator_pb.CalculatorServiceClient) {
+	req := &calculator_pb.CalculatorRequest{
+		NumberOne: 3,
+		NumberTwo: 2,
 	}
-	res,err:=c.Sum(context.Background(),req)
-	if err!=nil{
-		log.Fatalf("Error when calling RPC:%v",err)
+	res, err := c.Sum(context.Background(), req)
+	if err != nil {
+		log.Fatalf("Error when calling RPC:%v", err)
 	}
-	fmt.Printf("Result:%v",res.Result)
+	fmt.Printf("Result:%v", res.Result)
 }
