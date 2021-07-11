@@ -12,44 +12,47 @@ import (
 	"google.golang.org/grpc"
 )
 
-type server struct {}
+type server struct{}
 
-func (*server) Greet(ctx context.Context,req *greetpb.GreetRequest) (*greetpb.GreetResponse, error){
-	fmt.Printf("Greet func invoked %v",req)
+func init() {
+	log.SetPrefix("SERVER_STREAMING\n")
+}
+
+func (*server) Greet(ctx context.Context, req *greetpb.GreetRequest) (*greetpb.GreetResponse, error) {
+	fmt.Printf("Greet func invoked %v", req)
 	firstName := req.GetGreeting().GetFirstName()
 	result := "Hello " + firstName
 	res := &greetpb.GreetResponse{
 		Result: result,
 	}
-	return res,nil
+	return res, nil
 }
 
-func (*server) GreetManyTimes(req *greetpb.GreetManyTimesRequest,stream greetpb.GreetService_GreetManyTimesServer)error{
+func (*server) GreetManyTimes(req *greetpb.GreetManyTimesRequest, stream greetpb.GreetService_GreetManyTimesServer) error {
 	firstName := req.GetGreeting().GetFirstName()
-	for i:=0;i<10;i++{
-		result:="Hello "+firstName + " number " + strconv.Itoa(i)
+	for i := 0; i < 10; i++ {
+		result := "Hello " + firstName + " number " + strconv.Itoa(i)
 		res := &greetpb.GreetManyTimesResponse{
-			Result:result,
+			Result: result,
 		}
 		stream.Send(res)
-		time.Sleep(1*time.Second)
+		time.Sleep(1 * time.Second)
 	}
 	return nil
 }
 
-
 func main() {
 	fmt.Println("Hello")
 	// tcpでgrpc標準のポートへ接続
-	lis,err:=net.Listen("tcp","0.0.0.0:50051")
-	if err!=nil{
-		log.Fatalf("failed to listen: %v",err)
+	lis, err := net.Listen("tcp", "0.0.0.0:50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
-	s:=grpc.NewServer()
+	s := grpc.NewServer()
 
-	greetpb.RegisterGreetServiceServer(s,&server{})
+	greetpb.RegisterGreetServiceServer(s, &server{})
 
-	if err:=s.Serve(lis);err!=nil{
-		log.Fatalf("failed to serve: %v",err)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
 }
