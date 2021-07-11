@@ -10,7 +10,7 @@ import (
 )
 
 
-type server struct{}
+type server struct {}
 
 func (*server) Sum(ctx context.Context, req *calculator_pb.CalculatorRequest)(*calculator_pb.CalculatorResponse,error){
 	number1 := req.TwoNumber.GetNumber1()
@@ -30,6 +30,6 @@ func main(){
 	s:=grpc.NewServer()
 	calculator_pb.RegisterCalculatorServiceServer(s,&server{})
 	if err:=s.Serve(lis);err!=nil{
-		log.Fatalln("failed to serve:",err)
+		log.Fatalf("Failed to serve:%v",err)
 	}
 }
