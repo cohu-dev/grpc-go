@@ -17,6 +17,6 @@ message CalculatorResponse{
 }
 
 service CalculatorService{
-    rpc Greet(CalculatorRequest) returns (CalculatorResponse){};
+    rpc Sum(CalculatorRequest) returns (CalculatorResponse){};
 }
 // protoc calculator/calculator_pb/calculator.proto --go_out=plugins=grpc:.
