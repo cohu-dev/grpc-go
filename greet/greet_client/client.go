@@ -32,22 +32,22 @@ func main() {
 
 }
 
-func doUnary(c greetpb.GreetServiceClient) {
-	fmt.Println("start Unary RPC")
-	req := &greetpb.GreetRequest{
-		Greeting: &greetpb.Greeting{
-			FirstName: "Yamada",
-			LastName:  "Taro",
-		},
-	}
+// func doUnary(c greetpb.GreetServiceClient) {
+// 	fmt.Println("start Unary RPC")
+// 	req := &greetpb.GreetRequest{
+// 		Greeting: &greetpb.Greeting{
+// 			FirstName: "Yamada",
+// 			LastName:  "Taro",
+// 		},
+// 	}
 
-	res, err := c.Greet(context.Background(), req)
-	if err != nil {
-		log.Fatalf("error while calling greet API:%v", err)
-	}
+// 	res, err := c.Greet(context.Background(), req)
+// 	if err != nil {
+// 		log.Fatalf("error while calling greet API:%v", err)
+// 	}
 
-	log.Printf("response from greet: %v", res.Result)
-}
+// 	log.Printf("response from greet: %v", res.Result)
+// }
 
 func doServerStreaming(c greetpb.GreetServiceClient) {
 	req := &greetpb.GreetManyTimesRequest{

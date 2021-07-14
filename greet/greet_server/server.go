@@ -19,9 +19,9 @@ func init() {
 }
 
 func (*server) Greet(ctx context.Context, req *greetpb.GreetRequest) (*greetpb.GreetResponse, error) {
-	fmt.Printf("Greet func invoked %v", req)
 	firstName := req.GetGreeting().GetFirstName()
-	result := "Hello " + firstName
+	lastName := req.GetGreeting().GetLastName()
+	result := "Hello " + firstName + " " + lastName
 	res := &greetpb.GreetResponse{
 		Result: result,
 	}
