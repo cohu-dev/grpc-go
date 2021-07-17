@@ -12,7 +12,17 @@ message CalculatorResponse{
     int32 result = 1;
 }
 
+message PrimeNumberDecompositionRequest{
+    int32 input = 1;
+}
+
+message PrimeNumberDecompositionResponse{
+    int32 result = 1;
+}
+
 service CalculatorService{
     rpc Sum(CalculatorRequest) returns (CalculatorResponse){};
+
+    rpc PrimeNumberDecomposition(PrimeNumberDecompositionRequest) returns (stream PrimeNumberDecompositionResponse){}
 }
 // protoc calculator/calculator_pb/calculator.proto --go_out=plugins=grpc:.
